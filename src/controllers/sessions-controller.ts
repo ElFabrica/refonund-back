@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { AppError } from "@/utils/AppError";
-import { authConfig } from "@/configs/auth";
-import { prisma } from "@/database/prisma";
+import { AppError } from "../utils/AppError";
+import { authConfig } from "../configs/auth";
+import { prisma } from "../database/prisma";
 import { sign } from "jsonwebtoken";
 import { compare } from "bcryptjs";
 import { z } from "zod";
@@ -31,14 +31,10 @@ class SessionsController {
 
     const { secret, expiresIn } = authConfig.jwt;
 
-    const token = sign(
-      { role: user.role },
-      String(secret),
-      {
-        subject: String(user.id),
-        expiresIn,
-      }
-    );
+    const token = sign({ role: user.role }, String(secret), {
+      subject: String(user.id),
+      expiresIn,
+    });
 
     const { password: _, ...userWithoutPassword } = user;
 
